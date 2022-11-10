@@ -4,7 +4,7 @@
 def txt_to_list(txt_file, size=None):
     ''' txt_file, a string representing the pathway and name of a text file
     returns a list of words based on the text file, assuming a line break
-    between words. 
+    between words.
     example: The text file below
 
     Bob  123
@@ -28,8 +28,23 @@ def txt_to_list(txt_file, size=None):
     file.close()
     return word_list
 
+def txt_to_set(txt_file):
+    ''' txt_file, a string representing the pathway and name of a text file
+    returns a set of words based on the text file, assuming a line break
+    between words.
+    example: The text file below
+
+    Bob  123
+    Sue 234
+    Charlie  456
+
+    returns {'BOB', 'SUE', 'CHARLIE'}'''
+    return set(line.strip().upper() for line in open(txt_file, "r"))
 
 def createWebster(dictionary):
+    ##########
+    # Unused #
+    ##########
     '''Takes a dict representing webter's dictionary,  returns list of all words without definitions.'''
     output = open("webster.txt", "w")
     for word in dictionary:
@@ -38,14 +53,14 @@ def createWebster(dictionary):
     output.close()
 
 
-def filter(word_list, min=4, max=13):
-    """takes in a list of strings and integers min and max representing range of desired lengths.Removes Swear words. 
+def filter(word_seq, min=4, max=13):
+    """takes in a sequence of strings and integers min and max representing range of desired lengths.Removes Swear words.
 
-    returns list with only words of desired lengths
+    returns set with only words of desired lengths
     standard is 4 and 13 as that is the spelling bee parameter"""
     from better_profanity import profanity
     filtered_list = []
-    for word in word_list:
+    for word in word_seq:
         # removes words that contain "s"
         if "S" not in word:
             # adds the word if it is the correct length
@@ -54,10 +69,13 @@ def filter(word_list, min=4, max=13):
             if not profane and (len(word) in range(min, max + 1)):
                 filtered_list.append(word)
 
-    return filtered_list
+    return set(filtered_list)
 
 
 def intersection(short_list, long_list):
+    ##########
+    # Unused #
+    ##########
     '''Returns the sorted, unique values that are in both of the lists.'''
     from numpy import array, intersect1d
     short = array(short_list)
@@ -81,6 +99,9 @@ def isPangram(word, length=7):
         return True
     return False
 
+def createPangram(seq):
+    return set(word for word in seq if isPangram(word))
+
 #### End of methods used to pre-process data
 
 
@@ -96,6 +117,16 @@ def randomizePangram(pangram):
     shuffle(letter_list)
     return "".join(letter_list)  # joins list into string
 
+
+def print_pangram(pangram):
+    string = f'''
+        {pangram[1]}
+{pangram[2]}                {pangram[3]} 
+        {pangram[0]} 
+{pangram[4]}                {pangram[5]} 
+        {pangram[6]}   
+'''
+    print(string)
 
 def findWords(pangram, word_list):
     '''
@@ -114,7 +145,7 @@ def findWords(pangram, word_list):
                     break
             if goodWord:
                 possible_words.append(word)
-    return possible_words
+    return set(possible_words)
 
 def validate(potential_word, pangram, guessed_words, wordList):
     '''
@@ -128,7 +159,7 @@ def validate(potential_word, pangram, guessed_words, wordList):
         print("Word must be at least 4 letters long.")
         return False
     elif potential_word not in wordList:
-        print("That is not a word in English.")
+        print("That is not a word in my Word List.")
         return False
     elif potential_word in guessed_words:
         print("You've already guessed that word.")
