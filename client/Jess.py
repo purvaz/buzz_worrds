@@ -12,17 +12,17 @@ Words_list = ['Embolden', 'Emboldened', 'Bellmen', 'Bloom', 'Bloomed', 'Bomb', '
 pygame.init()
 screen = pygame.display.set_mode((1440, 810))
 pygame.display.set_caption("BuzzWords")
-icon = pygame.image.load("/Users/jesspederson/buzz_worrds/client/Media/Bee.png")
+icon = pygame.image.load("../client/Media/Bee.png")
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
-font = pygame.font.Font("/Users/jesspederson/buzz_worrds/client/Font/LexendDeca-VariableFont_wght.ttf", 50)
+font = pygame.font.Font("../client/Font/LexendDeca-VariableFont_wght.ttf", 50)
 
 # font setup
 # def font(font_size):
 # font = pygame.font.Font("/Users/jesspederson/buzz_worrds/client/Font/LexendDeca-VariableFont_wght.ttf",font_size)
 
 # set-up
-background = pygame.image.load("/Users/jesspederson/buzz_worrds/client/Media/Buzzwords_background.jpg")
+background = pygame.image.load("../client/Media/Buzzwords_background.jpg")
 scaled_background = pygame.transform.scale(background, (1440, 810))
 score_text = font.render('88', True, 'Black')
 
@@ -39,7 +39,7 @@ def rotate_bee (angle):
     return rotated_image
 
 # resize & angle bee
-bee = pygame.image.load("/Users/jesspederson/buzz_worrds/client/Media/Bee.png")
+bee = pygame.image.load("../client/Media/Bee.png")
 default_bee_size = (250, 200)
 bee_250 = pygame.transform.scale(bee, default_bee_size)
 starting_bee = rotate_bee(45)
