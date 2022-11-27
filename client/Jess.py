@@ -1,6 +1,5 @@
 import pygame
 import random
-import sys
 
 # create game window
 pygame.init()
@@ -9,6 +8,9 @@ pygame.display.set_caption("BuzzWords")
 icon = pygame.image.load("../client/Media/Bee.png")
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
+
+my_buzzwords = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                '10', '11', '12', '13', '14', '15', '16', '17']  # reset list to empty to be fed from backend
 
 
 # font setup
@@ -46,7 +48,7 @@ def wrapping_centered_text(wordbubble_message, screen):
         fw, fh = wc_font.size(line)
         # text_x = orig x + halfway across bubble
         text_x = 1060
-        text_y = 140
+        text_y = 145
         tx = text_x - fw / 2
         ty = text_y + y_offset
         font_surface = wc_font.render(line, True, "Black")
@@ -57,39 +59,41 @@ def wrapping_centered_text(wordbubble_message, screen):
 
 # scoring
 score_font = font(60)
-score = 15  # will later be fed from backend
+score = 7  # will later be fed from backend
 score_string = str(score)
 if score >= 100:
-    score_location = (95, 580)
+    score_location = (93, 580)
 elif 10 <= score < 100:
     score_location = (103, 580)
-elif score < 10:
-    score_location = (110, 580)
+else:
+    score_location = (113, 580)
 
 # guessing
 guess_font = font(75)
 max_guess_length = 13
 guess_input = ''
-# guess_location_x = 335
-# guess_location_y = 680
-# guess_location = (guess_location_x,guess_location_y)
 # note to self: pygame.Rect(x,y,w,h)
-guess_box = pygame.Rect(335, 677, 625, 95)
+guess_box = pygame.Rect(335, 665, 625, 70)
 guess_box_color = (238, 238, 238)
 
 # bee word bubble
 wordbubble_font = font(24)
+# note to self: pygame.Rect(x,y,w,h)
 wordbubble_box = pygame.Rect(992, 145, 140, 90)
 wordbubble_box_color = (255, 255, 255)
 message = ""
 instructions_prompt = "Need instructions? Click on me."
+
+# My BuzzWords list
+mbw_box = pygame.Rect(100, 100, 485, 285)
+mbw_box_color = (238, 238, 238)
+mbw_font = pygame.font.Font("../client/Font/LexendDeca-VariableFont_wght.ttf", 16)
 
 # surfaces
 background = pygame.image.load("../client/Media/Buzzwords_background.jpg")
 scaled_background = pygame.transform.scale(background, (1440, 810))
 score_text = score_font.render(score_string, True, 'Black')
 wordbubble_text = wordbubble_font.render(message, True, 'Black')
-# display_guess = guess_font.render(guess_input, True, 'Black')
 
 # initially place bee
 bee_x = 1100
@@ -113,13 +117,84 @@ resting_angle = 15
 starting_bee = rotate_bee(resting_angle)
 wordbubble_bee = pygame.image.load("../client/Media/wordbubble bee.png")
 wordbubble_bee_250 = pygame.transform.scale(wordbubble_bee, (396, 279))
-# wordbubble_bee_location = (bee_x-135.65,bee_y-76.85)
+# wordbubble_bee_location = (bee_x-135.65,bee_y-71.85)
 wbx = 964.35
-wby = 123.15
+wby = 128.15
 wordbubble_bee_location = (wbx, wby)
 
 
-def correct_answer_dance():
+def my_buzzwords_list_displayed():
+    mbw_y = 103
+    mbw_length = len(my_buzzwords)
+    if mbw_length < 0:
+        wordbubble_pop_up(instructions_prompt)
+        # 2000 = 2 sec wait
+        pygame.time.delay(2000)
+    elif 0 < mbw_length <= 14:
+        for i in range(0, mbw_length):
+            mbw_x = 100
+            mbw = mbw_font.render(my_buzzwords[i], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+    elif 15 <= mbw_length <= 29:
+        for i in range(0, 15):
+            mbw_x = 100
+            mbw = mbw_font.render(my_buzzwords[i], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for j in range(15, mbw_length):
+            mbw_x = 221.25
+            mbw = mbw_font.render(my_buzzwords[j], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+    elif 30 <= mbw_length <= 44:
+        for i in range(0, 15):
+            mbw_x = 100
+            mbw = mbw_font.render(my_buzzwords[i], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for j in range(15, 30):
+            mbw_x = 221.25
+            mbw = mbw_font.render(my_buzzwords[j], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for k in range(30, mbw_length):
+            mbw_x = 342.5
+            mbw = mbw_font.render(my_buzzwords[k], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+    elif 45 <= mbw_length <= 60:
+        for i in range(0, 15):
+            mbw_x = 100
+            mbw = mbw_font.render(my_buzzwords[i], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for j in range(15, 30):
+            mbw_x = 221.25
+            mbw = mbw_font.render(my_buzzwords[j], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for k in range(30, 45):
+            mbw_x = 342.5
+            mbw = mbw_font.render(my_buzzwords[k], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+        mbw_y = 103
+        for m in range(45, mbw_length):
+            mbw_x = 463.75
+            mbw = mbw_font.render(my_buzzwords[m], True, "Black")
+            screen.blit(mbw, (mbw_x, mbw_y))
+            mbw_y += 18
+
+
+def correct_answer():
     for i in range(resting_angle, (360 + resting_angle)):
         screen.blit(scaled_background, (0, 0))
         screen.blit(score_text, score_location)
@@ -168,15 +243,34 @@ def correct_answer_dance():
               "Marvelous!",
               "Phenomenal!",
               "That's creative!"]
-    praise_length = len(praise)
+    praise_length = len(praise) - 1
     chosen_index = int(random.randint(0, praise_length))
     selected_praise = praise[chosen_index]
     return selected_praise
 
 
+def wrong_answer():
+    global bee_x
+    global bee_y
+    for j in range(4):
+        for i in range(1090, 1110, 10):
+            buzz_x = i
+            buzz_y = bee_y
+            screen.blit(scaled_background, (0, 0))
+            screen.blit(score_text, score_location)
+            screen.blit(starting_bee, (buzz_x, buzz_y))
+            pygame.time.delay(12)
+            pygame.display.flip()
+    wordbubble_pop_up("That's not in my list. Try again!")
+    # 1500 = 1.5 sec wait
+    pygame.time.wait(1500)
+    pygame.display.flip()
+
+
 def wordbubble_pop_up(wordbubble_message):
+    screen.blit(scaled_background, (0, 0))
+    screen.blit(score_text, score_location)
     screen.blit(wordbubble_bee_250, wordbubble_bee_location)
-    pygame.draw.rect(screen, wordbubble_box_color, wordbubble_box)
     wrapping_centered_text(wordbubble_message, screen)
     pygame.display.flip()
 
@@ -186,6 +280,7 @@ while running:
     screen.blit(scaled_background, (0, 0))
     screen.blit(starting_bee, (bee_x, bee_y))
     screen.blit(score_text, score_location)
+    my_buzzwords_list_displayed()
 
     # event checking loop
     for event in pygame.event.get():
@@ -201,12 +296,19 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 guess_input = ""
             elif event.key == pygame.K_RETURN:
-                selected_praise = correct_answer_dance()
+                selected_praise = correct_answer()
                 wordbubble_pop_up(selected_praise)
-                pygame.time.delay(50)
+                # 2000 = 2 sec wait
+                pygame.time.delay(2000)
+                my_buzzwords.append(guess_input)
                 guess_input = ""
             elif event.key == pygame.K_TAB:
                 wordbubble_pop_up(instructions_prompt)
+                # 2000 = 2 sec wait
+                pygame.time.delay(2000)
+                guess_input = ""
+            elif event.key == pygame.K_SPACE:
+                wrong_answer()
                 guess_input = ""
             elif event.key == pygame.K_BACKSPACE:
                 guess_input = guess_input[:-1]
@@ -214,7 +316,6 @@ while running:
                 if len(guess_input) < max_guess_length:
                     guess_input += event.unicode
 
-        pygame.draw.rect(screen, guess_box_color, guess_box)
         display_guess = guess_font.render(guess_input, True, 'Black')
         screen.blit(display_guess, (guess_box.x + 10, guess_box.y + 10))
         guess_box.w = max(100, display_guess.get_width() + 10)
