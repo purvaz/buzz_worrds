@@ -1,5 +1,10 @@
 import pygame
 import random
+import sys  # using sys to import python modules outside of client folder
+
+sys.path.append("../server")  # importing pathway to server
+import buzzWords as bw  # modules created by Kris.
+import wordSets
 
 # create game window
 pygame.init()
@@ -9,8 +14,21 @@ icon = pygame.image.load("../client/Media/Bee.png")
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 
-my_buzzwords = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                '10', '11', '12', '13', '14', '15', '16', '17']  # reset list to empty to be fed from backend
+pangrams = wordSets.filteredPangrams
+pangram = random.choice(pangrams)  # chooses random pangram
+scrambled_pangram = bw.randomizePangram(pangram)
+possible_words = bw.findWords(scrambled_pangram, wordSets.totalSet, 60)
+percentiles = bw.percentile(possible_words)
+
+'''Remove next 5 lines after testing complete.
+'''
+print(f"Pangram is: {pangram}")
+print(f"Shuffled pangram is {scrambled_pangram}")
+print(f"Possible words build from this pangram are: {possible_words}")
+print(f"Number of possible words is: {len(possible_words)}")
+print(f"Percentile Categories are: f{percentiles}")
+
+my_buzzwords = bw.createEmptyList(len(possible_words))  # reset list to empty to be fed from backend
 
 
 # font setup
@@ -58,8 +76,10 @@ def wrapping_centered_text(wordbubble_message, screen):
 
 
 # scoring
+score = 0  # initial score
+guessed_words = []
+expertise = "Beginner"  # initial expertise level.
 score_font = font(60)
-score = 7  # will later be fed from backend
 score_string = str(score)
 if score >= 100:
     score_location = (93, 580)
@@ -249,7 +269,7 @@ def correct_answer():
     return selected_praise
 
 
-def wrong_answer():
+def wrong_answer(message="That's not in my list. Try again!"):
     global bee_x
     global bee_y
     for j in range(4):
@@ -261,7 +281,7 @@ def wrong_answer():
             screen.blit(starting_bee, (buzz_x, buzz_y))
             pygame.time.delay(12)
             pygame.display.flip()
-    wordbubble_pop_up("That's not in my list. Try again!")
+    wordbubble_pop_up(message)
     # 1500 = 1.5 sec wait
     pygame.time.wait(1500)
     pygame.display.flip()
@@ -296,12 +316,58 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 guess_input = ""
             elif event.key == pygame.K_RETURN:
-                selected_praise = correct_answer()
-                wordbubble_pop_up(selected_praise)
-                # 2000 = 2 sec wait
-                pygame.time.delay(2000)
-                my_buzzwords.append(guess_input)
+                '''
+                Adding code from back end here
+                '''
+                if bw.validate(guess_input.upper(), scrambled_pangram, guessed_words, wordSets.totalSet):
+                    guessed_words.append(guess_input.upper())
+                    print(f"guessed words are: {guessed_words}")
+                    selected_praise = correct_answer()
+                    wordbubble_pop_up(selected_praise)
+                    pygame.time.delay(2000)
+                    index = len(guessed_words) - 1
+                    my_buzzwords[index] = f"{my_buzzwords[index]} {guess_input.upper()}"
+                    increase = bw.score(guess_input.upper())
+                    # insert message about score increase?
+                    # Jessica, updated score needs to be on screen.
+                    score += increase
+                    print(f"Score is {score}")
+                    # message about expertise status?
+                    expertise = bw.expertise(percentiles, score)
+
+                else:
+
+                    if len(guess_input) < 4:
+                        wrong_answer("Word must be at least 4 letters long.")
+
+                    elif guess_input.upper() in guessed_words:
+                        wrong_answer("You already guessed that word")
+
+                    elif guess_input.upper() not in wordSets.totalSet:
+                        wrong_answer("That is not a word in my Word List.")
+
+                    elif scrambled_pangram[0].upper() not in guess_input.upper():
+                        wrong_answer(f'You did not use the required letter "{scrambled_pangram[0]}"!')
+
+                    # checks if the guessed word uses only the letters in the pangram.
+                    else:
+                        for i in range(1, len(guess_input)):
+                            letter = guess_input[i]
+                            if letter not in scrambled_pangram:
+                                wrong_answer(f'"{letter}" is not a possible letter choice!')
+
                 guess_input = ""
+                '''
+                End adding code
+                '''
+                # Jess' Code
+                # selected_praise = correct_answer()
+                # wordbubble_pop_up(selected_praise)
+                # # 2000 = 2 sec wait
+                # pygame.time.delay(2000)
+                # my_buzzwords.append(guess_input)
+                # guess_input = ""
+
             elif event.key == pygame.K_TAB:
                 wordbubble_pop_up(instructions_prompt)
                 # 2000 = 2 sec wait

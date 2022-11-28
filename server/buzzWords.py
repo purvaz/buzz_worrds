@@ -128,16 +128,17 @@ def print_pangram(pangram):
 '''
     print(string)
 
-def findWords(pangram, word_list):
+def findWords(pangram, word_list, max_size = 1000):
     '''
     :param pangram: buzzWord's current pangram
     :param word_list: list of all English words (e.g. webster's dictionary)
+    :param max_size: maximum amount of words returned
     :return: all possible words that can be made with that pangram
     Assumes that the first letter given is the required letter
     returns a list of all possible words'''
     possible_words = []
     for word in word_list:
-        if pangram[0] in word:  # checks for required letter
+        if pangram[0] in word and len(word) > 3:  # checks for required letter
             goodWord = True
             for letter in word:
                 if letter not in pangram:
@@ -145,6 +146,8 @@ def findWords(pangram, word_list):
                     break
             if goodWord:
                 possible_words.append(word)
+                if len(possible_words) == max_size:
+                    return(set(possible_words))
     return set(possible_words)
 
 def validate(potential_word, pangram, guessed_words, wordList):
@@ -155,9 +158,14 @@ def validate(potential_word, pangram, guessed_words, wordList):
     :return: boolean. True if valid word, False other wise.
     '''
 
+
     if len(potential_word) < 4:
         print("Word must be at least 4 letters long.")
         return False
+    elif potential_word in guessed_words:
+        print("You already guessed that word")
+        return False
+
     elif potential_word not in wordList:
         print("That is not a word in my Word List.")
         return False
@@ -174,6 +182,26 @@ def validate(potential_word, pangram, guessed_words, wordList):
             return False
 
     return True
+
+    # if len(potential_word) < 4:
+    #     print("Word must be at least 4 letters long.")
+    #     return False
+    # elif potential_word not in wordList:
+    #     print("That is not a word in my Word List.")
+    #     return False
+    # elif potential_word in guessed_words:
+    #     print("You've already guessed that word.")
+    #     return False
+    # elif pangram[0] not in potential_word:
+    #     print(f'You did not use the required letter "{pangram[0]}"!')
+    #     return False
+    # # checks if the guessed word uses only the letters in the pangram.
+    # for letter in potential_word:
+    #     if letter not in pangram:
+    #         print(f'"{letter}" is not a possible letter choice!')
+    #         return False
+    #
+    # return True
 
 def score(valid_word):
     if len(valid_word) == 4:
@@ -247,3 +275,13 @@ def startMenu():
             print("Please Enter a choice from above.")
 
     return pangram.pangrams[num_words]
+
+def createEmptyList(num):
+    '''
+    :param num: represents the length of the needed list
+    :return: list. Strings representing integers
+    '''
+    r = []
+    for i in range(1, num + 1):
+        r.append(f"{i}")
+    return r
