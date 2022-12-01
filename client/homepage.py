@@ -2,6 +2,7 @@
 # This is the homepage
 import pygame
 import random
+import time
 
 
 
@@ -24,29 +25,29 @@ pygame.display.set_caption("BuzzWords")
 screen = pygame.display.set_mode((1440,810))
 
 # Image.png 32 x 32 pixel size
-icon = pygame.image.load("C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/Bee.png").convert_alpha()
+icon = pygame.image.load('../client/Media/Bee.png').convert_alpha()
 pygame.display.set_icon(icon)
 
 # create a shuffle image (<a href="https://www.flaticon.com/free-icons/random" title="random icons">Random icons created by Uniconlabs - Flaticon</a>)
-shuffle = pygame.image.load('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/shuffle.png').convert_alpha()
+shuffle = pygame.image.load('../client/Media/shuffle.png').convert_alpha()
 shuffleRect = shuffle.get_rect(topleft = (1150, 650))
 
 
 # create the bee for the help message (<a href="https://www.flaticon.com/free-icons/bee" title="bee icons">Bee icons created by Rohim - Flaticon</a>)
-bee = pygame.image.load('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/help_bee.png').convert_alpha()
+bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
 beeRect = bee.get_rect(topleft = (300, 500))
 
 # create help message
-help_bee = pygame.image.load('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/help_bee.png').convert_alpha()
+help_bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
 help_button = help_bee.get_rect(topleft = (1200, 300))
 
 # create the play button
 black = (0, 0, 0)
-yellow = (253, 218, 13)
+yellow = (254, 194, 37)
 white = (255, 255, 255)
-lilac = (190, 170, 210)
+purple = (165, 148, 204)
 
-font =  pygame.font.Font('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/LexendDeca-Regular.ttf', 75)
+font =  pygame.font.Font('../client/Font/LexendDeca-VariableFont_wght.ttf', 75)
 play = font.render('Play', True, black, yellow)
 playRect = play.get_rect(topleft = (1225, 150))
 
@@ -65,20 +66,11 @@ def home_screen():
 
 
 letter_list = ['F', 'A', 'T', 'I', 'G', 'U', 'E'] # just used to test the code
-# def randomizePangram(pangram):
-#     """Returns the letters of given pangram in randomized order"""
-#     from random import shuffle
-#     for letter in pangram:
-#         if letter not in letter_list:
-#             letter_list.append(letter)
-#     shuffle(letter_list)
-#     return "".join(letter_list)  # joins list into string
 
 def start():
     random.shuffle(letter_list)
     pos1 = (900, 290)
     letter1 = letter_list[0]
-    #if len(letter_list) == 7:
     spliced_list = letter_list[1:7]
     print(letter_list)
     pos2 = (900, 155)
@@ -97,17 +89,17 @@ def start():
 
     first_letter = font.render(letter1, True, black, yellow)
     letter1_Rect= first_letter.get_rect(center=(pos1))
-    second_letter = font.render(letter2, True, black, lilac)
+    second_letter = font.render(letter2, True, black, purple)
     letter2_Rect = second_letter.get_rect(center=(pos2))
-    third_letter = font.render(letter3, True, black, lilac)
+    third_letter = font.render(letter3, True, black, purple)
     letter3_Rect = third_letter.get_rect(center=(pos3))
-    fourth_letter = font.render(letter4, True, black, lilac)
+    fourth_letter = font.render(letter4, True, black, purple)
     letter4_Rect = fourth_letter.get_rect(center=(pos4))
-    fifth_letter = font.render(letter5, True, black, lilac)
+    fifth_letter = font.render(letter5, True, black, purple)
     letter5_Rect = fifth_letter.get_rect(center=(pos5))
-    sixth_letter = font.render(letter6, True, black, lilac)
+    sixth_letter = font.render(letter6, True, black, purple)
     letter6_Rect = sixth_letter.get_rect(center=(pos6))
-    seventh_letter = font.render(letter7, True, black, lilac)
+    seventh_letter = font.render(letter7, True, black, purple)
     letter7_Rect = seventh_letter.get_rect(center=(pos7))
 
     screen.blit(first_letter, letter1_Rect)
@@ -117,6 +109,7 @@ def start():
     screen.blit(fifth_letter, letter5_Rect)
     screen.blit(sixth_letter, letter6_Rect)
     screen.blit(seventh_letter, letter7_Rect)
+    time.sleep(5)
 
 def play_screen(clicking, isPlay_button):
     #clicking = False
