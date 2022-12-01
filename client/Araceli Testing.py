@@ -42,13 +42,13 @@ help_bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
 help_button = help_bee.get_rect(topleft = (1200, 300))
 
 # create the play button
-black = (0, 0, 0)
+#black = (0, 0, 0)
 yellow = (253, 218, 13)
 white = (255, 255, 255)
-lilac = (190, 170, 210)
+#lilac = (190, 170, 210)
 
 font =  pygame.font.Font('../client/Font/LexendDeca-VariableFont_wght.ttf', 75)
-play = font.render('Play', True, black, yellow)
+play = font.render('Play', True, "Black", yellow)
 playRect = play.get_rect(topleft = (1225, 150))
 
 
@@ -106,19 +106,19 @@ def display_letters(letter_list):
     pos7 = (780, 358)
     letter7 = letter_list[6]
 
-    first_letter = font.render(letter1, True, black, yellow)
+    first_letter = font.render(letter1, True, "Black")
     letter1_Rect = first_letter.get_rect(center=(pos1))
-    second_letter = font.render(letter2, True, black, lilac)
+    second_letter = font.render(letter2, True, "Black")
     letter2_Rect = second_letter.get_rect(center=(pos2))
-    third_letter = font.render(letter3, True, black, lilac)
+    third_letter = font.render(letter3, True, "Black")
     letter3_Rect = third_letter.get_rect(center=(pos3))
-    fourth_letter = font.render(letter4, True, black, lilac)
+    fourth_letter = font.render(letter4, True, "Black")
     letter4_Rect = fourth_letter.get_rect(center=(pos4))
-    fifth_letter = font.render(letter5, True, black, lilac)
+    fifth_letter = font.render(letter5, True, "Black")
     letter5_Rect = fifth_letter.get_rect(center=(pos5))
-    sixth_letter = font.render(letter6, True, black, lilac)
+    sixth_letter = font.render(letter6, True, "Black")
     letter6_Rect = sixth_letter.get_rect(center=(pos6))
-    seventh_letter = font.render(letter7, True, black, lilac)
+    seventh_letter = font.render(letter7, True, "Black")
     letter7_Rect = seventh_letter.get_rect(center=(pos7))
 
     screen.blit(first_letter, letter1_Rect)
