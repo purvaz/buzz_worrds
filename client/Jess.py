@@ -1,6 +1,8 @@
 import pygame
 import random
+import time
 import sys  # using sys to import python modules outside of client folder
+import Aracelli as ar  # imports all functions created by Aracelli - displays letters, help, shuffles letters.
 
 sys.path.append("../server")  # importing pathway to server
 import buzzWords as bw  # modules created by Kris.
@@ -13,6 +15,40 @@ pygame.display.set_caption("BuzzWords")
 icon = pygame.image.load("../client/Media/Bee.png")
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
+
+'''
+Aracelli's Code
+'''
+
+clicking = False
+isPlay_button = False
+isHelp_button = False
+isShuffle_button = False
+
+# create a shuffle image (<a href="https://www.flaticon.com/free-icons/random" title="random icons">Random icons created by Uniconlabs - Flaticon</a>)
+shuffle = pygame.image.load('../client/Media/shuffle.png').convert_alpha()
+shuffleRect = shuffle.get_rect(topleft=(1150, 650))
+
+# create the bee for the help message (<a href="https://www.flaticon.com/free-icons/bee" title="bee icons">Bee icons created by Rohim - Flaticon</a>)
+bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
+beeRect = bee.get_rect(topleft=(300, 500))
+
+# create help message
+help_bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
+help_button = help_bee.get_rect(topleft=(1200, 300))
+
+# create the play button
+yellow = (253, 218, 13)
+white = (255, 255, 255)
+
+font = pygame.font.Font('../client/Font/LexendDeca-VariableFont_wght.ttf', 75)
+play = font.render('Play', True, "Black", yellow)
+playRect = play.get_rect(topleft=(1225, 150))
+
+'''
+End Aracelli's global code code
+'''
+
 
 pangrams = wordSets.filteredPangrams
 pangram = random.choice(pangrams)  # chooses random pangram
@@ -294,9 +330,49 @@ def wordbubble_pop_up(wordbubble_message):
     wrapping_centered_text(wordbubble_message, screen)
     pygame.display.flip()
 
+###
+#ar.home_screen()
+###
 
-running = True
+running = False
+preGame = True
+
+while preGame:  # Waits for the user to click play before the game begins.
+    screen.blit(scaled_background, (0, 0))
+    screen.blit(starting_bee, (bee_x, bee_y))
+    screen.blit(score_text, score_location)
+    screen.blit(help_bee, help_button)
+    ar.play_screen()
+    ar.help_screen()
+
+    mouse_pos = pygame.mouse.get_pos()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            preGame = False
+            # quit when pressing escape
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                preGame = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if help_button.collidepoint(mouse_pos):
+                    ar.help_screen()
+                    time.sleep(5)
+
+                if playRect.collidepoint(mouse_pos):
+                    preGame = False
+                    running = True
+
+    pygame.display.flip()
+    clock.tick(60)
+
+
 while running:
+
+    ### AR
+    mouse_pos = pygame.mouse.get_pos()
+
     screen.blit(scaled_background, (0, 0))
     screen.blit(starting_bee, (bee_x, bee_y))
     screen.blit(score_text, score_location)
@@ -310,6 +386,12 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+        ###AR
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if shuffleRect.collidepoint(mouse_pos):
+                    scrambled_pangram = ar.shuffleScreen(scrambled_pangram)
+        ###
 
         if event.type == pygame.KEYDOWN:
             # Check for backspace
@@ -358,9 +440,9 @@ while running:
 
                 guess_input = ""
                 '''
-                End adding code
+                End Back End
                 '''
-                # Jess' Code
+                # Jess' Original Code
                 # selected_praise = correct_answer()
                 # wordbubble_pop_up(selected_praise)
                 # # 2000 = 2 sec wait
@@ -384,7 +466,11 @@ while running:
 
         display_guess = guess_font.render(guess_input, True, 'Black')
         screen.blit(display_guess, (guess_box.x + 10, guess_box.y + 10))
+        screen.blit(shuffle, shuffleRect)  #displays shuffle icon
+        score_text = score_font.render(str(score), True, 'Black')
+        screen.blit(score_text, score_location)  #displays current score
         guess_box.w = max(100, display_guess.get_width() + 10)
+        ar.display_letters(scrambled_pangram)  #displays the letters
 
         # always have at the end
         pygame.display.flip()
