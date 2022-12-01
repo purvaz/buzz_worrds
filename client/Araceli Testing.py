@@ -25,20 +25,20 @@ pygame.display.set_caption("BuzzWords")
 screen = pygame.display.set_mode((1440,810))
 
 # Image.png 32 x 32 pixel size
-icon = pygame.image.load('C:/Users/Araceli Ramirez/PycharmProjects/testing/venv/Bee.png').convert_alpha()
+icon = pygame.image.load('../client/Media/Bee.png').convert_alpha()
 pygame.display.set_icon(icon)
 
 # create a shuffle image (<a href="https://www.flaticon.com/free-icons/random" title="random icons">Random icons created by Uniconlabs - Flaticon</a>)
-shuffle = pygame.image.load('C:/Users/Araceli Ramirez/PycharmProjects/testing/venv/shuffle.png').convert_alpha()
+shuffle = pygame.image.load('../client/Media/shuffle.png').convert_alpha()
 shuffleRect = shuffle.get_rect(topleft = (1150, 650))
 
 
 # create the bee for the help message (<a href="https://www.flaticon.com/free-icons/bee" title="bee icons">Bee icons created by Rohim - Flaticon</a>)
-bee = pygame.image.load('C:/Users/Araceli Ramirez/PycharmProjects/testing/venv/help_bee.png').convert_alpha()
+bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
 beeRect = bee.get_rect(topleft = (300, 500))
 
 # create help message
-help_bee = pygame.image.load('C:/Users/Araceli Ramirez/PycharmProjects/testing/venv/help_bee.png').convert_alpha()
+help_bee = pygame.image.load('../client/Media/help_bee.png').convert_alpha()
 help_button = help_bee.get_rect(topleft = (1200, 300))
 
 # create the play button
@@ -47,14 +47,14 @@ yellow = (253, 218, 13)
 white = (255, 255, 255)
 lilac = (190, 170, 210)
 
-font =  pygame.font.Font('C:/Users/Araceli Ramirez/PycharmProjects/testing/venv/LexendDeca-VariableFont_wght.ttf', 75)
+font =  pygame.font.Font('../client/Font/LexendDeca-VariableFont_wght.ttf', 75)
 play = font.render('Play', True, black, yellow)
 playRect = play.get_rect(topleft = (1225, 150))
 
 
 
 # create a background
-background = pygame.image.load('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/Buzzwords_background_-_version_A.png').convert_alpha()
+background = pygame.image.load("../client/Media/Buzzwords_background.jpg").convert_alpha()
 background_rect = background.get_rect(topleft = (0, 50))
 
 def home_screen():
@@ -128,7 +128,7 @@ def play_screen(clicking, isPlay_button):
 
 
 def help_screen():
-    font = pygame.font.Font('C:/Users/Araceli Ramirez/Documents/buzz_worrds/client/venv/LexendDeca-Regular.ttf', 20)
+    font = pygame.font.Font('../client/Font/LexendDeca-VariableFont_wght.ttf', 20)
     display_surface = pygame.display.set_mode((1440, 810))
     scaled_background = pygame.transform.scale(background, (1440, 810))
     screen.blit(scaled_background, (0, 0))
