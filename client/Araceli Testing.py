@@ -65,11 +65,32 @@ def home_screen():
     screen.blit(play, playRect)
 
 
-letter_list = ['F', 'A', 'T', 'I', 'G', 'U', 'E'] # just used to test the code
+test_letter_list = ['F', 'A', 'T', 'I', 'G', 'U', 'E'] # just used to test the code
 
-def start():
+def start(letter_list):
     random.shuffle(letter_list)
+    display_letters(letter_list)
     print(letter_list)
+
+
+
+def play_screen():
+    global clicking, isPlay_button, isHelp_button, isShuffle_button
+    scaled_background = pygame.transform.scale(background, (1440, 810))
+    screen.blit(scaled_background, (0, 0))
+    screen.blit(shuffle, shuffleRect)
+    #clicking = False
+
+
+    if clicking and isPlay_button:
+        start(test_letter_list)
+        isPlay_button = False
+        clicking = False
+        isShuffle_button = False
+
+
+
+def display_letters(letter_list):
     pos1 = (900, 290)
     letter1 = letter_list[0]
     pos2 = (900, 155)
@@ -100,7 +121,6 @@ def start():
     seventh_letter = font.render(letter7, True, black, lilac)
     letter7_Rect = seventh_letter.get_rect(center=(pos7))
 
-
     screen.blit(first_letter, letter1_Rect)
     screen.blit(second_letter, letter2_Rect)
     screen.blit(third_letter, letter3_Rect)
@@ -108,23 +128,8 @@ def start():
     screen.blit(fifth_letter, letter5_Rect)
     screen.blit(sixth_letter, letter6_Rect)
     screen.blit(seventh_letter, letter7_Rect)
+    pygame.display.flip()
     #time.sleep(10)
-
-
-def play_screen(clicking, isPlay_button):
-    #clicking = False
-    scaled_background = pygame.transform.scale(background, (1440, 810))
-    screen.blit(scaled_background, (0, 0))
-    screen.blit(shuffle, shuffleRect)
-
-
-    if clicking and isPlay_button:
-        start()
-        isPlay_button = False
-        clicking = False
-        isShuffle_button = False
-        return clicking, isPlay_button
-
 
 
 def help_screen():
@@ -169,56 +174,31 @@ def help_screen():
     display_surface.blit(help_message10, help_window10)
 
 
-def shuffleScreen(spliced_list):
+def shuffleScreen(letter_list):
+    global clicking, isPlay_button, isHelp_button, isShuffle_button
     clicking = False
+    spliced_list = letter_list[1:]
     random.shuffle(spliced_list)
+    shuffled_list = list(letter_list[0]) + spliced_list
     scaled_background = pygame.transform.scale(background, (1440, 810))
     screen.blit(scaled_background, (0, 0))
     screen.blit(shuffle, shuffleRect)
-    pos2 = (900, 155)
-    letter2 = letter_list[0]
-    pos3 = (1020, 223)
-    letter3 = letter_list[1]
-    pos4 = (1020, 358)
-    letter4 = letter_list[2]
-    pos5 = (900, 425)
-    letter5 = letter_list[3]
-    pos6 = (780, 223)
-    letter6 = letter_list[4]
-    pos7 = (780, 358)
-    letter7 = letter_list[5]
+    display_letters(shuffled_list)
 
-    second_letter = font.render(letter2, True, black, lilac)
-    letter2_Rect = second_letter.get_rect(center=(pos2))
-    third_letter = font.render(letter3, True, black, lilac)
-    letter3_Rect = third_letter.get_rect(center=(pos3))
-    fourth_letter = font.render(letter4, True, black, lilac)
-    letter4_Rect = fourth_letter.get_rect(center=(pos4))
-    fifth_letter = font.render(letter5, True, black, lilac)
-    letter5_Rect = fifth_letter.get_rect(center=(pos5))
-    sixth_letter = font.render(letter6, True, black, lilac)
-    letter6_Rect = sixth_letter.get_rect(center=(pos6))
-    seventh_letter = font.render(letter7, True, black, lilac)
-    letter7_Rect = seventh_letter.get_rect(center=(pos7))
 
-    screen.blit(second_letter, letter2_Rect)
-    screen.blit(third_letter, letter3_Rect)
-    screen.blit(fourth_letter, letter4_Rect)
-    screen.blit(fifth_letter, letter5_Rect)
-    screen.blit(sixth_letter, letter6_Rect)
-    screen.blit(seventh_letter, letter7_Rect)
-    time.sleep(10)
 
     if clicking and isShuffle_button:
-        start()
+        #start()
         isShuffle_button = False
         isPlay_button = False
         clicking = False
 
 
 # Game loop
+home_screen()
 while True:
-    home_screen()
+
+
 
     mouse_pos = pygame.mouse.get_pos()
     if clicking and isHelp_button:
@@ -229,12 +209,12 @@ while True:
 
     if clicking and isPlay_button:
         #clicking, isPlay_button = play_screen(clicking, isPlay_button)
-        play_screen(clicking, isPlay_button)
+        play_screen()
 
 
     if clicking and isShuffle_button:
-        shuffleScreen(spliced_list)
-        play_screen(clicking, isPlay_button)
+        shuffleScreen(test_letter_list)
+
 
 
     for event in pygame.event.get():
