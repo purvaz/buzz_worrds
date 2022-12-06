@@ -420,23 +420,23 @@ while running:
                 else:
 
                     if len(guess_input) < 4:
-                        wrong_answer("Word must be at least 4 letters long.")
+                        wrong_answer("You need at least 4 letters")
 
                     elif guess_input.upper() in guessed_words:
                         wrong_answer("You already guessed that word")
 
                     elif guess_input.upper() not in wordSets.totalSet:
-                        wrong_answer("That is not a word in my Word List.")
+                        wrong_answer("That's not a word in my list")
 
                     elif scrambled_pangram[0].upper() not in guess_input.upper():
-                        wrong_answer(f'You did not use the required letter "{scrambled_pangram[0]}"!')
+                        wrong_answer(f'Be sure to use "{scrambled_pangram[0]}"')
 
                     # checks if the guessed word uses only the letters in the pangram.
                     else:
                         for i in range(1, len(guess_input)):
                             letter = guess_input[i]
                             if letter not in scrambled_pangram:
-                                wrong_answer(f'"{letter}" is not a possible letter choice!')
+                                wrong_answer(f'"{letter}" is not in my flower')
 
                 guess_input = ""
                 '''
